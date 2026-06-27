@@ -59,86 +59,93 @@ export function TableRow({ row, index }) {
   const input = 'w-full px-2.5 py-1.5 text-sm border border-indigo-300 rounded-md outline-none focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500 bg-white transition-all';
   const rowBg = isEditing ? 'bg-indigo-50/70' : index % 2 === 0 ? 'bg-white' : 'bg-slate-50/60';
 
-  return (
-    <div
-      style={{ height: ROW_HEIGHT }}
-      className={`flex w-full border-b border-slate-100 group transition-colors duration-100 ${rowBg} ${!isEditing ? 'hover:bg-indigo-50/40' : ''}`}
-    >
-      <div className="flex items-center px-4 w-[8%] text-xs text-slate-400 font-mono shrink-0">
-        #{row.id}
-      </div>
-
-      <div className="flex items-center px-3 w-[22%] text-sm font-medium text-slate-800 truncate">
-        {isEditing
-          ? <input className={input} value={draft.name} onChange={e => updateField(row.id, 'name', e.target.value)} autoFocus />
-          : <span className="truncate">{row.name}</span>
-        }
-      </div>
-
-      <div className="flex items-center px-3 w-[26%] text-sm text-slate-500 truncate">
-        {isEditing
-          ? <input type="email" className={input} value={draft.email} onChange={e => updateField(row.id, 'email', e.target.value)} />
-          : <span className="truncate">{row.email}</span>
-        }
-      </div>
-
-      <div className="flex items-center px-3 w-[20%]">
-        {isEditing
-          ? <input className={input} value={draft.department} onChange={e => updateField(row.id, 'department', e.target.value)} />
-          : (
-            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ring-1 ring-inset ${deptColor}`}>
-              {row.department}
-            </span>
-          )
-        }
-      </div>
-
-      <div className="flex items-center px-3 w-[14%] font-mono text-sm font-semibold text-emerald-700">
-        {isEditing
-          ? <input type="number" className={input} value={draft.salary} onChange={e => updateField(row.id, 'salary', Number(e.target.value))} />
-          : `$${row.salary.toLocaleString()}`
-        }
-      </div>
-
-      <div className="flex items-center justify-end px-4 w-[10%] gap-1.5">
-        {isEditing ? (
-          <>
-            <button
-              onClick={() => saveEdit(row.id)}
-              title="Save"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-white bg-emerald-500 hover:bg-emerald-600 transition-colors shadow-sm"
-            >
-              <SaveIcon /> Save
-            </button>
-            <button
-              onClick={() => cancelEdit(row.id)}
-              title="Cancel"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 bg-slate-200 hover:bg-slate-300 transition-colors"
-            >
-              <CancelIcon />
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={() => startEdit(row)}
-              title="Edit row"
-              className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors opacity-0 group-hover:opacity-100"
-            >
-              <EditIcon /> Edit
-            </button>
-            {isDirty && (
-              <button
-                onClick={() => undoEdit(row.id)}
-                title="Undo changes"
-                className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors"
-              >
-                <UndoIcon />
-              </button>
-            )}
-          </>
-        )}
-      </div>
+  const actionButtons = isEditing ? (
+    <div className="flex items-center gap-1.5">
+      <button onClick={() => saveEdit(row.id)} title="Save" className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-white bg-emerald-500 hover:bg-emerald-600 transition-colors shadow-sm">
+        <SaveIcon /> Save
+      </button>
+      <button onClick={() => cancelEdit(row.id)} title="Cancel" className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-slate-600 bg-slate-200 hover:bg-slate-300 transition-colors">
+        <CancelIcon />
+      </button>
     </div>
+  ) : (
+    <div className="flex items-center gap-1.5">
+      <button onClick={() => startEdit(row)} title="Edit row" className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 transition-colors sm:opacity-0 sm:group-hover:opacity-100 opacity-100">
+        <EditIcon /> Edit
+      </button>
+      {isDirty && (
+        <button onClick={() => undoEdit(row.id)} title="Undo changes" className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium text-amber-600 bg-amber-50 hover:bg-amber-100 transition-colors">
+          <UndoIcon />
+        </button>
+      )}
+    </div>
+  );
+
+  return (
+    <>
+      {/* ── Mobile card layout (hidden on sm+) ── */}
+      <div className={`sm:hidden border-b border-slate-200 p-4 transition-colors ${isEditing ? 'bg-indigo-50/70' : 'bg-white'}`}>
+        <div className="flex items-start justify-between gap-2 mb-3">
+          <div className="min-w-0">
+            {isEditing
+              ? <input className={input} value={draft.name} onChange={e => updateField(row.id, 'name', e.target.value)} autoFocus placeholder="Name" />
+              : <p className="font-semibold text-slate-800 truncate">{row.name}</p>
+            }
+            <p className="text-xs text-slate-400 font-mono mt-0.5">#{row.id}</p>
+          </div>
+          <span className={`shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ring-1 ring-inset ${deptColor}`}>
+            {isEditing
+              ? <input className="w-24 px-1 py-0.5 text-xs border border-indigo-300 rounded outline-none bg-white" value={draft.department} onChange={e => updateField(row.id, 'department', e.target.value)} />
+              : row.department
+            }
+          </span>
+        </div>
+
+        <div className="space-y-1.5 mb-3">
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-slate-400 w-14 shrink-0 text-xs">Email</span>
+            {isEditing
+              ? <input type="email" className={`${input} text-xs`} value={draft.email} onChange={e => updateField(row.id, 'email', e.target.value)} />
+              : <span className="text-slate-600 truncate text-xs">{row.email}</span>
+            }
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-slate-400 w-14 shrink-0 text-xs">Salary</span>
+            {isEditing
+              ? <input type="number" className={`${input} text-xs`} value={draft.salary} onChange={e => updateField(row.id, 'salary', Number(e.target.value))} />
+              : <span className="font-mono font-semibold text-emerald-700 text-sm">${row.salary.toLocaleString()}</span>
+            }
+          </div>
+        </div>
+
+        <div className="flex justify-end">{actionButtons}</div>
+      </div>
+
+      {/* ── Desktop row layout (hidden below sm) ── */}
+      <div
+        style={{ height: ROW_HEIGHT }}
+        className={`hidden sm:flex w-full border-b border-slate-200 group transition-colors duration-100 ${rowBg} ${!isEditing ? 'hover:bg-indigo-50/40' : ''}`}
+      >
+        <div className="flex items-center px-4 w-[8%] text-xs text-slate-400 font-mono shrink-0">#{row.id}</div>
+        <div className="flex items-center px-3 w-[22%] text-sm font-medium text-slate-800 truncate">
+          {isEditing ? <input className={input} value={draft.name} onChange={e => updateField(row.id, 'name', e.target.value)} autoFocus /> : <span className="truncate">{row.name}</span>}
+        </div>
+        <div className="flex items-center px-3 w-[26%] text-sm text-slate-500 truncate">
+          {isEditing ? <input type="email" className={input} value={draft.email} onChange={e => updateField(row.id, 'email', e.target.value)} /> : <span className="truncate">{row.email}</span>}
+        </div>
+        <div className="flex items-center px-3 w-[20%]">
+          {isEditing
+            ? <input className={input} value={draft.department} onChange={e => updateField(row.id, 'department', e.target.value)} />
+            : <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ring-1 ring-inset ${deptColor}`}>{row.department}</span>
+          }
+        </div>
+        <div className="flex items-center px-3 w-[14%] font-mono text-sm font-semibold text-emerald-700">
+          {isEditing ? <input type="number" className={input} value={draft.salary} onChange={e => updateField(row.id, 'salary', Number(e.target.value))} /> : `$${row.salary.toLocaleString()}`}
+        </div>
+        <div className="flex items-center justify-end px-4 w-[10%]">
+          {actionButtons}
+        </div>
+      </div>
+    </>
   );
 }

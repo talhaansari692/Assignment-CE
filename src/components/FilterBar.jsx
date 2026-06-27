@@ -21,7 +21,7 @@ export function FilterBar() {
   const { filterText, setFilterText, rows, processedRows } = useTable();
 
   return (
-    <div className="flex flex-col sm:flex-row gap-3 items-center justify-between bg-white px-5 py-4 border-b border-slate-100">
+    <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between bg-white px-4 py-3 border-b border-slate-100">
       <div className="relative w-full sm:w-96">
         <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
           <SearchIcon />
@@ -47,14 +47,14 @@ export function FilterBar() {
 
       <div className="flex items-center gap-2 shrink-0">
         {filterText && (
-          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100">
+          <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-100 whitespace-nowrap">
             {processedRows.length.toLocaleString()} result{processedRows.length !== 1 ? 's' : ''}
           </span>
         )}
         <button
           id="export-csv-btn"
           onClick={() => exportToCSV(rows)}
-          className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all duration-150 shadow-sm shadow-indigo-200"
+          className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 active:scale-95 transition-all duration-150 shadow-sm shadow-indigo-200 whitespace-nowrap"
         >
           <DownloadIcon />
           Export CSV
