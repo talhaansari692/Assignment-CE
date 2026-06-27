@@ -4,18 +4,24 @@ A data-intensive editable table component built with **React** and **Tailwind CS
 
 ## Setup Instructions
 
-1. **Install dependencies**
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/talhaansari692/Assignment-CE.git
+   cd Assignment-CE
+   ```
+
+2. **Install dependencies**
    ```bash
    npm install
    ```
 
-2. **Start the development server**
+3. **Start the development server**
    ```bash
    npm run dev
    ```
    Open `http://localhost:5173` in your browser.
 
-3. **Build for production**
+4. **Build for production** *(optional)*
    ```bash
    npm run build
    ```
